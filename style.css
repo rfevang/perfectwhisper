@@ -5,3 +5,9 @@ input {
 #erangel_lowres {
   width: 50%;
 }
+
+#info-box {
+  position: absolute;
+  left: calc(50% + 10px);
+  top: 0;
+}

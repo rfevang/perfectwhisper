@@ -4,6 +4,7 @@ class InfoBox {
     this.slider.addListener(this.update.bind(this));
     this.items = items;
     this.box = document.createElement('pre');
+    this.box.id = 'info-box';
     this.update();
   }
 
