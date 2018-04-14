@@ -18,7 +18,7 @@ class InfoBox {
   }
 
   findFirstAfterSliderTime() {
-    let datetime = new Date(this.slider.getValue());
+    let datetime = this.slider.getValue();
     for (let i = 0; i < this.items.length; i++) {
       let itemdate = new Date(this.items[i]["_D"]);
       if (new Date(this.items[i]["_D"]) >= datetime) return this.items[i];

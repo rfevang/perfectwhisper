@@ -15,7 +15,7 @@ class Slider {
   }
 
   getValue() {
-    return parseInt(this.slider_.value);
+    return new Date(parseInt(this.slider_.value));
   }
 
   addListener(listener) {
