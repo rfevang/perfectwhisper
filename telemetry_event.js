@@ -1,7 +1,7 @@
 class TelemetryEvent {
   constructor(data) {
-    this.data = data;
-    this.timestamp = Date.parse(data['_D']);
+    this.data_ = data;
+    this.timestamp_ = new Date(data['_D']);
   }
 
   static create(data) {
@@ -12,10 +12,14 @@ class TelemetryEvent {
   }
 
   get type() {
-    return this.data['_T'];
+    return this.data_['_T'];
+  }
+
+  get timestamp() {
+    return this.timestamp_;
   }
 
   toString() {
-    return JSON.stringify(this.data, null, 2);
+    return JSON.stringify(this.data_, null, 2);
   }
 }

@@ -1,32 +1,30 @@
 class Slider {
-  constructor(logStart, logEnd) {
-    this.start = Date.parse(logStart["_D"]);
-    this.end = Date.parse(logEnd["_D"]);
-    this.listeners = [];
+  constructor(start, end) {
+    this.listeners_ = [];
 
-    this.slider = document.createElement('Input');
-    this.slider.type = 'range';
-    this.slider.min = this.start;
-    this.slider.max = this.end;
-    this.slider.value = this.start;
-    this.slider.oninput = this.onupdate.bind(this);
+    this.slider_ = document.createElement('Input');
+    this.slider_.type = 'range';
+    this.slider_.min = start.timestamp.getTime();
+    this.slider_.max = end.timestamp.getTime();
+    this.slider_.value = this.slider_.min;
+    this.slider_.oninput = this.onupdate.bind(this);
   }
 
   render(parent) {
-    parent.appendChild(this.slider);
+    parent.appendChild(this.slider_);
   }
 
   getValue() {
-    return parseInt(this.slider.value);
+    return parseInt(this.slider_.value);
   }
 
   addListener(listener) {
-    this.listeners.push(listener);
+    this.listeners_.push(listener);
   }
 
   onupdate() {
     let args = arguments;
-    this.listeners.forEach(function(fn) {
+    this.listeners_.forEach(function(fn) {
       fn.apply(null, args);
     });
   }
