@@ -1,8 +1,10 @@
 class Match {
   constructor(matchEvents) {
+    this.events_ = [];
     let unknownTypes = new Map();
     matchEvents.forEach(function(e) {
       let event = TelemetryEvent.create(e);
+      this.events_.push(event);
       switch (event.type) {
         case 'LogMatchStart':
           this.start_ = event;
@@ -26,5 +28,9 @@ class Match {
 
   get end() {
     return this.end_;
+  }
+
+  allEvents() {
+    return this.events_;
   }
 }

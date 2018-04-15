@@ -16,7 +16,7 @@ function loadMatchData(response) {
   let slider = new Slider(match.start, match.end);
   slider.render(document.body);
 
-  let infobox = new InfoBox(slider, response);
+  let infobox = new InfoBox(slider, match);
   infobox.render(document.body);
 }
 

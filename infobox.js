@@ -1,27 +1,26 @@
 class InfoBox {
-  constructor(slider, items) {
-    this.slider = slider;
-    this.slider.addListener(this.update.bind(this));
-    this.items = items;
-    this.box = document.createElement('pre');
-    this.box.id = 'info-box';
+  constructor(slider, match) {
+    this.slider_ = slider;
+    slider.addListener(this.update.bind(this));
+    this.match_ = match;
+    this.box_ = document.createElement('pre');
+    this.box_.id = 'info-box';
     this.update();
   }
 
   render(parent) {
-    parent.appendChild(this.box);
+    parent.appendChild(this.box_);
   }
 
   update() {
-    let item = this.findFirstAfterSliderTime();
-    this.box.innerText = JSON.stringify(item, null, 2);
+    this.box_.innerText = this.findFirstAfterSliderTime();
   }
 
   findFirstAfterSliderTime() {
-    let datetime = this.slider.getValue();
-    for (let i = 0; i < this.items.length; i++) {
-      let itemdate = new Date(this.items[i]["_D"]);
-      if (new Date(this.items[i]["_D"]) >= datetime) return this.items[i];
+    let slidertime = this.slider_.getValue();
+    let events = this.match_.allEvents();
+    for (let i = 0; i < events.length; i++) {
+      if (events[i].timestamp >= slidertime) return events[i];
     }
   }
 }

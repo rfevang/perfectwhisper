@@ -3,7 +3,13 @@ input {
 }
 
 #erangel_lowres {
+  position: relative;
   width: 50%;
+}
+#erangel_lowres:before {
+  content: "";
+  padding-top: 100%;
+  display: block;
 }
 
 #info-box {
