@@ -12,7 +12,7 @@ function fetchData(url) {
 
 function loadMatchData(response) {
   let match = new Match(response);
-
+	
   let slider = new Slider(match.start, match.end);
   slider.render(document.body);
 
@@ -20,4 +20,11 @@ function loadMatchData(response) {
   infobox.render(document.body);
 }
 
-fetchData("telemetry-testdata.json");
+
+window.onload = function(){
+	
+	fetchData("https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2018/04/02/22/14/3e5226cb-36c3-11e8-a949-0a586466b919-telemetry.json");
+	
+}
+
+

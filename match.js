@@ -3,6 +3,11 @@ class Match {
     let unknownTypes = new Map();
     matchEvents.forEach(function(e) {
       let event = TelemetryEvent.create(e);
+	  let char = Character.create(e);
+	  
+	  if (e.hasOwnProperty("character")) {
+		  console.log("test");
+	  }
       switch (event.type) {
         case 'LogMatchStart':
           this.start_ = event;
