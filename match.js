@@ -1,6 +1,8 @@
 class Match {
   constructor(matchEvents) {
     this.events_ = [];
+    this.itemPickups_ = [];
+
     let unknownTypes = new Map();
     matchEvents.forEach(function(e) {
       let event = TelemetryEvent.create(e);
@@ -11,6 +13,9 @@ class Match {
           break;
         case 'LogMatchEnd':
           this.end_ = event;
+          break;
+        case 'LogItemPickup':
+          this.itemPickups_.push(event);
           break;
         default:
           if (!unknownTypes.has(event.type)) unknownTypes.set(event.type, []);

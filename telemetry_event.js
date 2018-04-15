@@ -6,6 +6,8 @@ class TelemetryEvent {
 
   static create(data) {
     switch(data['_T']) {
+      case "LogItemPickup":
+        return new ItemPickupEvent(data);
       default:
         return new TelemetryEvent(data);
     }
@@ -21,5 +23,25 @@ class TelemetryEvent {
 
   toString() {
     return JSON.stringify(this.data_, null, 2);
+  }
+}
+
+class CharacterEvent extends TelemetryEvent {
+  constructor(data) {
+    super(data);
+
+    this.character_ = new Character(data.character || data.Character);
+  }
+
+  get character() {
+    return this.character_;
+  }
+}
+
+class ItemPickupEvent extends CharacterEvent {
+  constructor(data) {
+    super(data);
+
+    this.item_ = new Item(data.item || data.Item);
   }
 }
