@@ -8,6 +8,8 @@ class TelemetryEvent {
     switch(data['_T']) {
       case "LogItemPickup":
         return new ItemPickupEvent(data);
+      case "LogPlayerCreate":
+        return new CharacterEvent(data);
       default:
         // TODO(rfevang): Replace with specializations based on type
         if (data.hasOwnProperty("character")) {
@@ -28,10 +30,6 @@ class TelemetryEvent {
   toString() {
     return JSON.stringify(this.data_, null, 2);
   }
-
-  isCharacterEvent() {
-    return false;
-  }
 }
 
 class CharacterEvent extends TelemetryEvent {
@@ -43,10 +41,6 @@ class CharacterEvent extends TelemetryEvent {
 
   get character() {
     return this.character_;
-  }
-
-  isCharacterEvent() {
-    return true;
   }
 }
 

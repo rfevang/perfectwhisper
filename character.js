@@ -7,4 +7,8 @@ class Character {
     this.ranking_ = data.ranking || data.Ranking;
     this.accountId_ = data.accountId || data.AccountId;
   }
+
+  get name() {
+    return this.name_;
+  }
 }

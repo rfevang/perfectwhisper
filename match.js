@@ -1,15 +1,12 @@
 class Match {
   constructor(matchEvents) {
     this.events_ = [];
-    this.characterEvents_ = [];
     this.itemPickups_ = [];
+    this.players_ = [];
 
     let unknownTypes = new Map();
     matchEvents.forEach(function(e) {
       let event = TelemetryEvent.create(e);
-      if (event.isCharacterEvent()) {
-        this.characterEvents_.push(event);
-      }
 
       this.events_.push(event);
       switch (event.type) {
@@ -21,6 +18,9 @@ class Match {
           break;
         case 'LogItemPickup':
           this.itemPickups_.push(event);
+          break;
+        case 'LogPlayerCreate':
+          this.players_.push(new Player(event));
           break;
         default:
           if (!unknownTypes.has(event.type)) unknownTypes.set(event.type, []);
@@ -44,7 +44,7 @@ class Match {
     return this.events_;
   }
 
-  characterEvents() {
-    return this.characterEvents_;
+  players() {
+    return this.players_;
   }
 }
