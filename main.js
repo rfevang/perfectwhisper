@@ -14,10 +14,12 @@ function loadMatchData(response) {
   let match = new Match(response);
 
   let slider = new Slider(match.start, match.end);
-  slider.render(document.body);
-
+  let map = new ActionMap(slider, match);
   let infobox = new InfoBox(slider, match);
+
+  map.render(document.body);
   infobox.render(document.body);
+  slider.render(document.body);
 }
 
 fetchData("telemetry-testdata.json");

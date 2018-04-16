@@ -2,14 +2,27 @@ input {
   width: 80%;
 }
 
-#erangel_lowres {
+#actionmap {
   position: relative;
-  width: 50%;
+  width: 800px;
+  height: 800px;
 }
-#erangel_lowres:before {
-  content: "";
-  padding-top: 100%;
-  display: block;
+
+#actionmap img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#actionmap svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.playercircle {
+  fill: #2299dd;
+  r: 10px;
 }
 
 #info-box {

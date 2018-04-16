@@ -11,4 +11,8 @@ class Character {
   get name() {
     return this.name_;
   }
+
+  get location() {
+    return this.location_;
+  }
 }
