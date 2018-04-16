@@ -12,10 +12,9 @@ class ActionMap {
 
     this.playerCircles_ = [];
     match.players().forEach(function(player) {
-      let circle = document.createElementNS(SVG_NS, 'circle');
-      circle.classList.add('playercircle');
-      this.svg_.appendChild(circle);
+      let circle = this.createCircleForPlayer_(player);
       this.playerCircles_.push(circle);
+      this.svg_.appendChild(circle);
     }, this);
 
     let map = document.createElement('img');
@@ -33,8 +32,19 @@ class ActionMap {
     this.match_.players().forEach(function(player, index) {
       let pos = player.locationAtTime(time);
       let circle = this.playerCircles_[index];
-      circle.setAttribute('cx', pos.x * 800 / 816000);
-      circle.setAttribute('cy', pos.y * 800 / 816000);
+      circle.setAttribute('transform', 'translate(' + (pos.x * 800 / 816000) + " " + (pos.y * 800 / 816000) + ")");
     }, this);
+  }
+
+  createCircleForPlayer_(player) {
+    let group = document.createElementNS(SVG_NS, 'g');
+    group.classList.add('playercircle');
+    let circle = document.createElementNS(SVG_NS, 'circle');
+    let text = document.createElementNS(SVG_NS, 'text');
+    text.textContent = String(player.teamId);
+
+    group.appendChild(circle);
+    group.appendChild(text);
+    return group;
   }
 }

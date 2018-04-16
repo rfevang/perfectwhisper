@@ -20,9 +20,16 @@ input {
   height: 100%;
 }
 
-.playercircle {
+.playercircle circle {
   fill: #2299dd;
   r: 10px;
+}
+
+.playercircle text {
+  fill: #0f0;
+  text-anchor: middle;
+  alignment-baseline: middle;
+  transform: translate(1px, 2px);
 }
 
 #info-box {

@@ -12,6 +12,10 @@ class Player {
     return this.character_.name;
   }
 
+  get teamId() {
+    return this.character_.teamId;
+  }
+
   addPositionEvent(event) {
     this.positionEvents_.push(event);
   }

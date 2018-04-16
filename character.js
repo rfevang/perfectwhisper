@@ -15,4 +15,8 @@ class Character {
   get location() {
     return this.location_;
   }
+
+  get teamId() {
+    return this.teamId_;
+  }
 }
