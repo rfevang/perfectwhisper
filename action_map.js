@@ -8,7 +8,7 @@ class ActionMap {
     this.element_ = document.createElement('div');
     this.element_.id = 'actionmap';
     this.svg_ = document.createElementNS(SVG_NS, 'svg');
- // this.svg_.setAttribute('viewBox', '100 100 800 800');
+    this.svg_.setAttribute('viewBox', '0 0 816000 816000');
 
     this.playerCircles_ = [];
     match.players().forEach(function(player) {
@@ -32,7 +32,7 @@ class ActionMap {
     this.match_.players().forEach(function(player, index) {
       let pos = player.locationAtTime(time);
       let circle = this.playerCircles_[index];
-      circle.setAttribute('transform', 'translate(' + (pos.x * 800 / 816000) + " " + (pos.y * 800 / 816000) + ")");
+      circle.setAttribute('transform', 'translate(' + pos.x + " " + pos.y + ")");
     }, this);
   }
 
