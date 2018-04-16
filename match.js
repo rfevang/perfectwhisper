@@ -3,6 +3,7 @@ class Match {
     this.events_ = [];
     this.itemPickups_ = [];
     this.players_ = [];
+    this.playerByName_ = new Map();
 
     let unknownTypes = new Map();
     matchEvents.forEach(function(e) {
@@ -20,7 +21,12 @@ class Match {
           this.itemPickups_.push(event);
           break;
         case 'LogPlayerCreate':
-          this.players_.push(new Player(event));
+          let player = new Player(event);
+          this.players_.push(player);
+          this.playerByName_.set(player.name, player);
+          break;
+        case 'LogPlayerPosition':
+          this.playerByName_.get(event.character.name).addPositionEvent(event);
           break;
         default:
           if (!unknownTypes.has(event.type)) unknownTypes.set(event.type, []);
