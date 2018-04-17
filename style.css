@@ -15,12 +15,12 @@ input {
 
 .playercircle circle {
   fill: #2299dd;
-  r: 7000px;
+  r: 14000px;
 }
 
 .playercircle text {
   fill: #0f0;
-  font-size: 10000px;
+  font-size: 20000px;
   text-anchor: middle;
   alignment-baseline: middle;
   transform: translate(0, 2400px);

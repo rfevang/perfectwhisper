@@ -12,10 +12,6 @@ class ActionMap {
     this.element_ = document.createElement('div');
     this.element_.id = 'actionmap';
     this.svg_ = document.createElementNS(SVG_NS, 'svg');
-    let viewbox = this.svg_.createSVGRect();
-    viewbox.width = MAX_X;
-    viewbox.height = MAX_Y;
-    this.viewbox = viewbox;
 
     let map = document.createElementNS(SVG_NS, 'image');
     map.setAttribute('width', MAX_X);
@@ -30,6 +26,11 @@ class ActionMap {
       this.playerCircles_.push(circle);
       this.svg_.appendChild(circle);
     }, this);
+
+    let viewbox = this.svg_.createSVGRect();
+    viewbox.width = MAX_X;
+    viewbox.height = MAX_Y;
+    this.viewbox = viewbox;
 
 
     slider.addListener(this.onUpdate_.bind(this));
@@ -49,7 +50,8 @@ class ActionMap {
     this.match_.players().forEach(function(player, index) {
       let pos = player.locationAtTime(time);
       let circle = this.playerCircles_[index];
-      circle.setAttribute('transform', 'translate(' + pos.x + " " + pos.y + ")");
+      let scale = this.viewbox.width / MAX_X;
+      circle.setAttribute('transform', 'translate(' + pos.x + ' ' + pos.y + ') scale(' + scale + ')');
     }, this);
   }
 
@@ -90,7 +92,6 @@ class ActionMap {
 
     this.lastX_ = e.pageX;
     this.lastY_ = e.pageY;
-    console.log('dragged', e);
   }
 
   onMouseWheel_(e) {
@@ -124,6 +125,7 @@ class ActionMap {
   set viewbox(box) {
     this.viewBox_ = this.copyViewbox_(box);
     this.svg_.setAttribute('viewBox', box.x + ' ' + box.y + ' ' + box.width + ' ' + box.height);
+    this.onUpdate_();
   }
 
   copyViewbox_(viewbox) {
