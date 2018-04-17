@@ -13,6 +13,10 @@ class ActionMap {
     this.element_ = document.createElement('div');
     this.element_.id = 'actionmap';
     this.svg_ = document.createElementNS(SVG_NS, 'svg');
+    let viewbox = this.svg_.createSVGRect();
+    viewbox.width = MAX_X;
+    viewbox.height = MAX_Y;
+    this.viewbox = viewbox;
 
     let map = document.createElementNS(SVG_NS, 'image');
     map.setAttribute('width', MAX_X);
@@ -32,7 +36,6 @@ class ActionMap {
     slider.addListener(this.onUpdate.bind(this));
     this.svg_.addEventListener('wheel', this.onMouseWheel.bind(this));
 
-    this.setViewBox_();
     this.element_.appendChild(this.svg_);
   }
 
@@ -61,20 +64,46 @@ class ActionMap {
     return group;
   }
 
-  setViewBox_() {
-    let sizeX = MAX_X / this.zoomFactor_;
-    let sizeY = MAX_Y / this.zoomFactor_;
+  onMouseWheel(e) {
+    if (e.deltaY == 0) {
+      return;
+    }
 
-    this.svg_.setAttribute('viewBox', (this.cx_ - sizeX/2.0) + ' ' + (this.cy_ - sizeY/2.0) + ' ' + sizeX + ' ' + sizeY);
+    let newViewbox = this.viewbox;
+    if (e.deltaY < 0) {
+      newViewbox.width /= 2;
+      newViewbox.height /= 2;
+    } else {
+      newViewbox.width *= 2;
+      newViewbox.height *= 2;
+    }
+
+    let clickOnScreenX = e.clientX / this.svg_.clientWidth;
+    let clickOnScreenY = e.clientY / this.svg_.clientHeight;
+    let clickX = this.viewbox.x + this.viewbox.width * clickOnScreenX;
+    let clickY = this.viewbox.y + this.viewbox.height * clickOnScreenY;
+    newViewbox.x = clickX - newViewbox.width * clickOnScreenX;
+    newViewbox.y = clickY - newViewbox.height * clickOnScreenY;
+
+    this.viewbox = newViewbox;
+    console.log(e.clientX + ' ' + e.clientY + ' ' + e.deltaY);
   }
 
-  onMouseWheel(e) {
-    if (e.deltaY < 0) {
-      this.zoomFactor_ *= 2;
-    } else if (e.deltaY > 0) {
-      this.zoomFactor_ /= 2;
-    }
-    this.setViewBox_();
-    console.log(e.clientX + ' ' + e.clientY + ' ' + e.deltaY);
+  get viewbox() {
+    return this.copyViewbox_(this.viewBox_);
+  }
+
+  set viewbox(box) {
+    this.viewBox_ = this.copyViewbox_(box);
+    this.svg_.setAttribute('viewBox', box.x + ' ' + box.y + ' ' + box.width + ' ' + box.height);
+  }
+
+  copyViewbox_(viewbox) {
+    let ret = this.svg_.createSVGRect();
+    ret.x = viewbox.x;
+    ret.y = viewbox.y;
+    ret.width = viewbox.width;
+    ret.height = viewbox.height;
+    return ret;
   }
 }
