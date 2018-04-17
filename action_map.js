@@ -78,15 +78,14 @@ class ActionMap {
       newViewbox.height *= 2;
     }
 
-    let clickOnScreenX = e.clientX / this.svg_.clientWidth;
-    let clickOnScreenY = e.clientY / this.svg_.clientHeight;
+    let clickOnScreenX = e.offsetX / this.svg_.clientWidth;
+    let clickOnScreenY = e.offsetY / this.svg_.clientHeight;
     let clickX = this.viewbox.x + this.viewbox.width * clickOnScreenX;
     let clickY = this.viewbox.y + this.viewbox.height * clickOnScreenY;
     newViewbox.x = clickX - newViewbox.width * clickOnScreenX;
     newViewbox.y = clickY - newViewbox.height * clickOnScreenY;
 
     this.viewbox = newViewbox;
-    console.log(e.clientX + ' ' + e.clientY + ' ' + e.deltaY);
   }
 
   get viewbox() {
