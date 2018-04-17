@@ -6,9 +6,8 @@ class ActionMap {
   constructor(slider, match) {
     this.slider_ = slider;
     this.match_ = match;
-    this.zoomFactor_ = 1;
-    this.cx_ = MAX_X/2;
-    this.cy_ = MAX_Y/2;
+    this.boundMouseDrag_ = this.onMouseDrag_.bind(this);
+    this.dragging_ = false;
 
     this.element_ = document.createElement('div');
     this.element_.id = 'actionmap';
@@ -33,8 +32,10 @@ class ActionMap {
     }, this);
 
 
-    slider.addListener(this.onUpdate.bind(this));
-    this.svg_.addEventListener('wheel', this.onMouseWheel.bind(this));
+    slider.addListener(this.onUpdate_.bind(this));
+    this.svg_.addEventListener('wheel', this.onMouseWheel_.bind(this));
+    this.svg_.addEventListener('mousedown', this.onMouseDown_.bind(this));
+    document.addEventListener('mouseup', this.onMouseUp_.bind(this));
 
     this.element_.appendChild(this.svg_);
   }
@@ -43,7 +44,7 @@ class ActionMap {
     parent.appendChild(this.element_);
   }
 
-  onUpdate() {
+  onUpdate_() {
     let time = this.slider_.getValue();
     this.match_.players().forEach(function(player, index) {
       let pos = player.locationAtTime(time);
@@ -64,7 +65,35 @@ class ActionMap {
     return group;
   }
 
-  onMouseWheel(e) {
+  onMouseDown_(e) {
+    this.dragging_ = true;
+    this.lastX_ = e.pageX;
+    this.lastY_ = e.pageY;
+    document.addEventListener('mousemove', this.boundMouseDrag_);
+  }
+
+  onMouseUp_(e) {
+    if (this.dragging_) {
+      document.removeEventListener('mousemove', this.boundMouseDrag_);
+      this.dragging_ = false;
+    }
+  }
+
+  onMouseDrag_(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    let newViewbox = this.viewbox;
+    newViewbox.x = newViewbox.x - (e.pageX - this.lastX_) * newViewbox.width / this.svg_.clientWidth;
+    newViewbox.y = newViewbox.y - (e.pageY - this.lastY_) * newViewbox.height / this.svg_.clientHeight;
+    this.viewbox = newViewbox;
+
+    this.lastX_ = e.pageX;
+    this.lastY_ = e.pageY;
+    console.log('dragged', e);
+  }
+
+  onMouseWheel_(e) {
     if (e.deltaY == 0) {
       return;
     }
