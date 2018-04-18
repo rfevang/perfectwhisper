@@ -12,19 +12,14 @@ function fetchData(url) {
 
 function loadMatchData(response) {
   let match = new Match(response);
-	
+
   let slider = new Slider(match.start, match.end);
-  slider.render(document.body);
+  let map = new ActionMap(slider, match);
+  let infobox = new InfoBox(slider, match);
 
-  let infobox = new InfoBox(slider, response);
+  map.render(document.body);
   infobox.render(document.body);
+  slider.render(document.body);
 }
 
-
-window.onload = function(){
-	
-	fetchData("https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2018/04/02/22/14/3e5226cb-36c3-11e8-a949-0a586466b919-telemetry.json");
-	
-}
-
-
+fetchData("telemetry-testdata.json");
