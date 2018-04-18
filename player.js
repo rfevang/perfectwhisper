@@ -28,4 +28,20 @@ class Player {
     }
     return best;
   }
+
+  trailAtTime(time, trailLength) {
+
+    let trail_ = "";
+    for (let i = 0; i < this.positionEvents_.length; i++) {
+      let posEvent_ = this.positionEvents_[i];
+      let pos = posEvent_.character.location;
+      
+      if (posEvent_.timestamp >= time-trailLength){
+        if (trail_ == "") trail_ = "M " + pos.x + " " + pos.y;
+        if (posEvent_.timestamp > time) break;
+          trail_ += " L " + pos.x + " " + pos.y;
+      }
+    }
+    return trail_;
+  }
 }

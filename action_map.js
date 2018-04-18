@@ -1,6 +1,7 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const MAX_X = 816000;
-const MAX_Y = 816000;
+const MAX_X = 819200;
+const MAX_Y = 819200;
+const TRAILLENGTH = 100000;
 
 class ActionMap {
   constructor(slider, match) {
@@ -21,11 +22,17 @@ class ActionMap {
 
 
     this.playerCircles_ = [];
+    this.playerTrails_ = [];
     match.players().forEach(function(player) {
+      let trail = this.createTrailForPlayer_(player);
+      this.playerTrails_.push(trail);
+      this.svg_.appendChild(trail);
+
       let circle = this.createCircleForPlayer_(player);
       this.playerCircles_.push(circle);
       this.svg_.appendChild(circle);
     }, this);
+
 
     let viewbox = this.svg_.createSVGRect();
     viewbox.width = MAX_X;
@@ -48,10 +55,15 @@ class ActionMap {
   onUpdate_() {
     let time = this.slider_.getValue();
     this.match_.players().forEach(function(player, index) {
+      let scale = this.viewbox.width / MAX_X;
       let pos = player.locationAtTime(time);
       let circle = this.playerCircles_[index];
-      let scale = this.viewbox.width / MAX_X;
       circle.setAttribute('transform', 'translate(' + pos.x + ' ' + pos.y + ') scale(' + scale + ')');
+
+      let trailPos = player.trailAtTime(time, TRAILLENGTH);
+      let trail = this.playerTrails_[index];
+      trail.setAttributeNS(null,"d",trailPos);
+      trail.setAttributeNS(null,"stroke-width", 2000 * scale);
     }, this);
   }
 
@@ -65,6 +77,12 @@ class ActionMap {
     group.appendChild(circle);
     group.appendChild(text);
     return group;
+  }
+
+  createTrailForPlayer_(player){
+    let path = document.createElementNS(SVG_NS, 'path');
+    path.classList.add('playerTrail');
+    return path;
   }
 
   onMouseDown_(e) {

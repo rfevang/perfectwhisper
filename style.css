@@ -26,6 +26,11 @@ input {
   transform: translate(0, 2400px);
 }
 
+.playerTrail{
+  fill: none;
+  stroke: white;
+}
+
 #info-box {
   position: absolute;
   left: 710px;
