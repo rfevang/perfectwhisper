@@ -14,12 +14,11 @@ class ActionMap {
     this.element_.id = 'actionmap';
     this.svg_ = document.createElementNS(SVG_NS, 'svg');
 
-    let map = document.createElementNS(SVG_NS, 'image');
-    map.setAttribute('width', MAX_X);
-    map.setAttribute('height', MAX_Y);
-    map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Erangel_Minimap_lowres.jpg');
-    this.svg_.appendChild(map);
-
+    this.map = document.createElementNS(SVG_NS, 'image');
+    this.map.setAttribute('width', MAX_X);
+    this.map.setAttribute('height', MAX_Y);
+    this.chooseMap();
+    this.svg_.appendChild(this.map);
 
     this.playerCircles_ = [];
     this.playerTrails_ = [];
@@ -33,12 +32,22 @@ class ActionMap {
       this.svg_.appendChild(circle);
     }, this);
 
+    this.redZone = document.createElementNS(SVG_NS,"circle");
+    this.redZone.classList.add('redZone');
+    this.svg_.appendChild(this.redZone);
+
+    this.whiteZone = document.createElementNS(SVG_NS,"circle");
+    this.whiteZone.classList.add('whiteZone');
+    this.svg_.appendChild(this.whiteZone);
+
+    this.blueZone = document.createElementNS(SVG_NS,"circle");
+    this.blueZone.classList.add('blueZone');
+    this.svg_.appendChild(this.blueZone);
 
     let viewbox = this.svg_.createSVGRect();
     viewbox.width = MAX_X;
     viewbox.height = MAX_Y;
     this.viewbox = viewbox;
-
 
     slider.addListener(this.onUpdate_.bind(this));
     this.svg_.addEventListener('wheel', this.onMouseWheel_.bind(this));
@@ -54,6 +63,7 @@ class ActionMap {
 
   onUpdate_() {
     let time = this.slider_.getValue();
+    let gameState = this.match_.gameStateAtTime(time);
     this.match_.players().forEach(function(player, index) {
       let scale = this.viewbox.width / MAX_X;
       let pos = player.locationAtTime(time);
@@ -64,6 +74,19 @@ class ActionMap {
       let trail = this.playerTrails_[index];
       trail.setAttributeNS(null,"d",trailPos);
       trail.setAttributeNS(null,"stroke-width", 2000 * scale);
+      this.redZone.setAttributeNS(null,"stroke-width", 2000 * scale);
+      this.whiteZone.setAttributeNS(null,"stroke-width", 2000 * scale);
+      this.blueZone.setAttributeNS(null,"stroke-width", 2000 * scale);
+      
+      if (player.isAlive(time)){
+        circle.classList.remove('dead');
+      } else {
+        circle.classList.add('dead');
+      }
+
+      this.updateZone(this.redZone, gameState.redZone.x, gameState.redZone.y, gameState.redZone.r, "red");
+      this.updateZone(this.whiteZone, gameState.whiteZone.x, gameState.whiteZone.y, gameState.whiteZone.r, "white");
+      this.updateZone(this.blueZone, gameState.blueZone.x, gameState.blueZone.y, gameState.blueZone.r, "blue");
     }, this);
   }
 
@@ -153,5 +176,29 @@ class ActionMap {
     ret.width = viewbox.width;
     ret.height = viewbox.height;
     return ret;
+  }
+
+  updateZone(zone, x, y, r, color){
+    zone.setAttributeNS(null, "cx", this.checkNull(x));
+    zone.setAttributeNS(null, "cy", this.checkNull(y));
+    zone.setAttributeNS(null, "r", this.checkNull(r));
+    zone.setAttributeNS(null, "stroke", color);
+  }
+
+  checkNull(el){
+    if (el == null) return 0
+    return el;
+  }
+
+  chooseMap(){
+    let mapName = this.match_.mapName();
+    switch (mapName) {
+      case "Erangel_Main":
+        this.map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Erangel_Minimap_lowres.jpg');
+        break;
+      case "Desert_Main":
+        this.map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Miramar_Minimap_lowres.jpg');
+        break;
+    }
   }
 }

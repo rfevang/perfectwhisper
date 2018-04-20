@@ -22,4 +22,4 @@ function loadMatchData(response) {
   slider.render(document.body);
 }
 
-fetchData("telemetry-testdata.json");
+fetchData("https://telemetry-cdn.playbattlegrounds.com/bluehole-pubg/pc-eu/2018/04/18/19/26/72be99c1-433e-11e8-a168-0a58646692e5-telemetry.json");

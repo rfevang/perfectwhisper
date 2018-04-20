@@ -1,6 +1,8 @@
 class Player {
   constructor(createEvent) {
     this.positionEvents_ = [];
+    this.deathEvent_ = 0;
+    this.killEvents_ = [];
     this.character_ = createEvent.character;
   }
 
@@ -18,6 +20,19 @@ class Player {
 
   addPositionEvent(event) {
     this.positionEvents_.push(event);
+  }
+
+  addDeathEvent(event) {
+    this.deathEvent_ = event;
+  }
+
+  addKillEvent(event) {
+    this.killEvents_.push(event);
+  }
+
+  isAlive(time){
+    if (this.deathEvent_ == 0) return true;
+    return (this.deathEvent_.timestamp > time);
   }
 
   locationAtTime(time) {
