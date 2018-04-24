@@ -53,4 +53,8 @@ class Match {
   players() {
     return this.players_;
   }
+  
+  mapName(){
+  	return this.start_.data_.mapName;
+  }
 }
