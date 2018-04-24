@@ -3,6 +3,7 @@ class Match {
     this.events_ = [];
     this.itemPickups_ = [];
     this.players_ = [];
+    this.gameStateEvents_ = [];
     this.playerByName_ = new Map();
 
     let unknownTypes = new Map();
@@ -28,6 +29,9 @@ class Match {
         case 'LogPlayerPosition':
           this.playerByName_.get(event.character.name).addPositionEvent(event);
           break;
+        case 'LogGameStatePeriodic':
+          this.gameStateEvents_.push(event);
+          break;
         default:
           if (!unknownTypes.has(event.type)) unknownTypes.set(event.type, []);
           unknownTypes.get(event.type).push(event);
@@ -52,5 +56,14 @@ class Match {
 
   players() {
     return this.players_;
+  }
+  
+  gameStateAtTime(time){
+    let latestGameState_ = this.gameStateEvents_[0];
+    for (let i = 0; i < this.gameStateEvents_.length; i++) {
+      if (this.gameStateEvents_[i].timestamp >= time) break;
+         latestGameState_ = this.gameStateEvents_[i].gameState;
+    }
+    return latestGameState_;
   }
 }
