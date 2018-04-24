@@ -62,8 +62,8 @@ class Match {
     let latestGameState_ = this.gameStateEvents_[0];
     for (let i = 0; i < this.gameStateEvents_.length; i++) {
       if (this.gameStateEvents_[i].timestamp >= time) break;
-         latestGameState_ = this.gameStateEvents_[i].gameState;
+         latestGameState_ = this.gameStateEvents_[i];
     }
-    return latestGameState_;
+    return latestGameState_.gameState;
   }
 }
