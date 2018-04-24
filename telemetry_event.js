@@ -10,6 +10,8 @@ class TelemetryEvent {
         return new ItemPickupEvent(data);
       case "LogPlayerCreate":
         return new CharacterEvent(data);
+      case 'LogGameStatePeriodic':
+        return new GameStateEvent(data);
       default:
         // TODO(rfevang): Replace with specializations based on type
         if (data.hasOwnProperty("character")) {
@@ -49,5 +51,17 @@ class ItemPickupEvent extends CharacterEvent {
     super(data);
 
     this.item_ = new Item(data.item || data.Item);
+  }
+}
+
+class GameStateEvent extends TelemetryEvent{
+  constructor(data){
+    super(data);
+
+    this.gameState_ = new GameState(data.gameState || data.GameState);
+  }
+
+  get gameState(){
+    return this.gameState_;
   }
 }
