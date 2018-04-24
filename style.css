@@ -31,3 +31,18 @@ input {
   left: 710px;
   top: 0;
 }
+
+.redZone{
+  stroke:red;
+  fill:none;
+}
+
+.whiteZone{
+  stroke:white;
+  fill:none;
+}
+
+.blueZone{
+  stroke:blue;
+  fill:none;
+}
