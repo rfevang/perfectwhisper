@@ -13,11 +13,11 @@ class ActionMap {
     this.element_.id = 'actionmap';
     this.svg_ = document.createElementNS(SVG_NS, 'svg');
 
-    let map = document.createElementNS(SVG_NS, 'image');
-    map.setAttribute('width', MAX_X);
-    map.setAttribute('height', MAX_Y);
-    map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Erangel_Minimap_lowres.jpg');
-    this.svg_.appendChild(map);
+    this.map = document.createElementNS(SVG_NS, 'image');
+    this.map.setAttribute('width', MAX_X);
+    this.map.setAttribute('height', MAX_Y);
+    this.chooseMap();
+    this.svg_.appendChild(this.map);
 
 
     this.playerCircles_ = [];
@@ -135,5 +135,17 @@ class ActionMap {
     ret.width = viewbox.width;
     ret.height = viewbox.height;
     return ret;
+  }
+  
+  chooseMap(){
+    let mapName = this.match_.mapName();
+    switch (mapName) {
+      case "Erangel_Main":
+        this.map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Erangel_Minimap_lowres.jpg');
+        break;
+      case "Desert_Main":
+        this.map.setAttribute('href', 'https://github.com/pubg/api-assets/raw/master/assets/maps/Miramar_Minimap_lowres.jpg');
+        break;
+    }
   }
 }
